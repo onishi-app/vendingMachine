@@ -68,9 +68,13 @@ class ViewController: UIViewController {
         }
     }
     
-    // お釣りボタン
+    // おつりボタン
     @IBAction func changeButton(_ sender: Any) {
-    
+        money += inputMoney
+        print("\(inputMoney)円のおつりをもらいました")
+        inputMoney = 0
+        moneyLabel.text = "所持金：\(money)円"
+        inputMoneyLabel.text = "金額：\(inputMoney)円"
     }
     
     func sendMoneyAction(value: Int) {
