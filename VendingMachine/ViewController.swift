@@ -7,6 +7,12 @@
 
 import UIKit
 
+enum Drink {
+    case irohasu
+    case ryokucha
+    case gogothi
+}
+
 class ViewController: UIViewController {
 
     // 所持金ラベル
@@ -25,7 +31,20 @@ class ViewController: UIViewController {
     
     // 購入ボタン
     @IBAction func buyButton(_ sender: Any) {
+        guard let button = sender as? UIButton else {
+            return
+        }
         
+        switch button.tag {
+        case 1:
+            buyDrink(product: .irohasu)
+        case 2:
+            buyDrink(product: .ryokucha)
+        case 3:
+            buyDrink(product: .gogothi)
+        default:
+            return
+        }
     }
     
     // 投入額選択ボタン
@@ -60,5 +79,23 @@ class ViewController: UIViewController {
         
         moneyLabel.text = "所持金：\(money)円"
         inputMoneyLabel.text = "金額：\(inputMoney)円"
+    }
+    
+    // 購入処理
+    func buyDrink(product: Drink) {
+        switch product {
+        case .irohasu:
+            inputMoney -= 100
+            inputMoneyLabel.text = "金額：\(inputMoney)円"
+            print("いろはすを購入しました。")
+        case .ryokucha:
+            inputMoney -= 120
+            inputMoneyLabel.text = "金額：\(inputMoney)円"
+            print("緑茶を購入しました。")
+        case .gogothi:
+            inputMoney -= 150
+            inputMoneyLabel.text = "金額：\(inputMoney)円"
+            print("午後ティーを購入しました。")
+        }
     }
 }
