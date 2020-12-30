@@ -14,6 +14,9 @@ class ViewController: UIViewController {
     // 投入金額ラベル
     @IBOutlet weak var inputMoneyLabel: UILabel!
     
+    var money = 1000
+    var inputMoney = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
  
@@ -27,11 +30,35 @@ class ViewController: UIViewController {
     
     // 投入額選択ボタン
     @IBAction func sendMoney(_ sender: Any) {
+        guard let button = sender as? UIButton else {
+            return
+        }
         
+        switch button.tag {
+        case 1:
+            sendMoneyAction(value: 10)
+        case 2:
+            sendMoneyAction(value: 50)
+        case 3:
+            sendMoneyAction(value: 100)
+        case 4:
+            sendMoneyAction(value: 500)
+        case 5:
+            sendMoneyAction(value: 1000)
+        default: return
+        }
     }
     
     // お釣りボタン
     @IBAction func changeButton(_ sender: Any) {
     
+    }
+    
+    func sendMoneyAction(value: Int) {
+        money -= value
+        inputMoney += value
+        
+        moneyLabel.text = "所持金：\(money)円"
+        inputMoneyLabel.text = "金額：\(inputMoney)円"
     }
 }
