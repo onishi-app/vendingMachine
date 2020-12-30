@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
- 
+        
         
     }
     
@@ -55,15 +55,35 @@ class ViewController: UIViewController {
         
         switch button.tag {
         case 1:
-            sendMoneyAction(value: 10)
+            guard let result = sendMoneyAction(value: 10) else {
+                print("所持金が不足しています。")
+                return
+            }
+            print(result)
         case 2:
-            sendMoneyAction(value: 50)
+            guard let result = sendMoneyAction(value: 50) else {
+                print("所持金が不足しています。")
+                return
+            }
+            print(result)
         case 3:
-            sendMoneyAction(value: 100)
+            guard let result = sendMoneyAction(value: 100) else {
+                print("所持金が不足しています。")
+                return
+            }
+            print(result)
         case 4:
-            sendMoneyAction(value: 500)
+            guard let result = sendMoneyAction(value: 500) else {
+                print("所持金が不足しています。")
+                return
+            }
+            print(result)
         case 5:
-            sendMoneyAction(value: 1000)
+            guard let result = sendMoneyAction(value: 1000) else {
+                print("所持金が不足しています。")
+                return
+            }
+            print(result)
         default: return
         }
     }
@@ -77,12 +97,17 @@ class ViewController: UIViewController {
         inputMoneyLabel.text = "金額：\(inputMoney)円"
     }
     
-    func sendMoneyAction(value: Int) {
+    func sendMoneyAction(value: Int) -> String? {
+        if money < value {
+            return nil
+        }
+        
         money -= value
         inputMoney += value
-        
         moneyLabel.text = "所持金：\(money)円"
         inputMoneyLabel.text = "金額：\(inputMoney)円"
+        
+        return "\(value)円を入れました。"
     }
     
     // 購入処理
