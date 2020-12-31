@@ -13,6 +13,11 @@ enum Drink {
     case gogothi
 }
 
+enum SomeError: Error {
+    case inventoryShortage(reason: String)
+    case lackOfMoney(reason: String)
+}
+
 class ViewController: UIViewController {
 
     // 所持金ラベル
@@ -116,36 +121,30 @@ class ViewController: UIViewController {
     func buyDrink(product: Drink) {
         switch product {
         case .irohasu:
-            if !inventoryControl(product: product) {
-                print("在庫がありません。")
-                return
-            }
-            if inputMoney - 100 < 0 {
-                print("お金が足りません。")
+            do {
+                try checkCondition(product: product, price: 100)
+            } catch {
+                print(error)
                 return
             }
             inputMoney -= 100
             inputMoneyLabel.text = "金額：\(inputMoney)円"
             print("いろはすを購入しました。")
         case .ryokucha:
-            if !inventoryControl(product: product) {
-                print("在庫がありません。")
-                return
-            }
-            if inputMoney - 120 < 0 {
-                print("お金が足りません。")
+            do {
+                try checkCondition(product: product, price: 120)
+            } catch {
+                print(error)
                 return
             }
             inputMoney -= 120
             inputMoneyLabel.text = "金額：\(inputMoney)円"
             print("緑茶を購入しました。")
         case .gogothi:
-            if !inventoryControl(product: product) {
-                print("在庫がありません。")
-                return
-            }
-            if inputMoney - 150 < 0 {
-                print("お金が足りません。")
+            do {
+                try checkCondition(product: product, price: 150)
+            } catch {
+                print(error)
                 return
             }
             inputMoney -= 150
@@ -154,28 +153,30 @@ class ViewController: UIViewController {
         }
     }
     
-    // 在庫管理
-    func inventoryControl(product: Drink) -> Bool {
+    //購入条件チェック
+    func checkCondition(product: Drink, price: Int) throws {
         switch product {
         case .irohasu:
             if irohasuStock == 0 {
-                return false
+                throw SomeError.inventoryShortage(reason: "いろはすの在庫がありません。")
+            } else if inputMoney < price  {
+                throw SomeError.lackOfMoney(reason: "\(inputMoney)円しか入れられていないので、いろはすを購入できません。")
             }
             irohasuStock -= 1
-            return true
         case .ryokucha:
             if ryokuchaStock == 0 {
-                return false
+                throw SomeError.inventoryShortage(reason: "緑茶の在庫がありません。")
+            } else if inputMoney < price {
+                throw SomeError.lackOfMoney(reason: "\(inputMoney)円しか入れられていないので、緑茶を購入できません。")
             }
             ryokuchaStock -= 1
-            return true
         case .gogothi:
             if gogothiStock == 0 {
-                return false
+                throw SomeError.inventoryShortage(reason: "午後ティーの在庫がありません。")
+            } else if inputMoney < price {
+                throw SomeError.lackOfMoney(reason: "\(inputMoney)円しか入れられていないので、午後ティーを購入できません。")
             }
             gogothiStock -= 1
-            return true
         }
     }
 }
-
